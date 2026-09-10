@@ -1,0 +1,146 @@
+{
+  "_comment": "Scoring profile derived from 'AKSHAY MAHAJAN - Resume full.pdf'. Everything the scorer knows about the candidate lives here, so tuning the hunt never means editing hunt.mjs.",
+
+  "candidate": {
+    "name": "Akshay Mahajan",
+    "email": "akshaymad0608@gmail.com",
+    "base": "Surat, Gujarat, India",
+    "headline": "AI Automation Engineer | Agentic AI & Prompt Engineer | Full-Stack Developer"
+  },
+
+  "searches": [
+    { "keywords": "AI Automation Engineer", "location": "India" },
+    { "keywords": "n8n", "location": "India" },
+    { "keywords": "Agentic AI", "location": "India" },
+    { "keywords": "AI Agent Developer", "location": "India" },
+    { "keywords": "Prompt Engineer", "location": "India" },
+    { "keywords": "Workflow Automation", "location": "India" },
+    { "keywords": "Generative AI Engineer", "location": "India" },
+    { "keywords": "AI Engineer", "location": "India", "remoteOnly": true },
+    { "keywords": "AI Automation", "location": "Gujarat, India" },
+    { "keywords": "AI Engineer", "location": "Gujarat, India" },
+    { "keywords": "React Developer", "location": "Surat, Gujarat, India" },
+    { "keywords": "Software Engineer", "location": "Surat, Gujarat, India" }
+  ],
+
+  "scoring": {
+    "hotTitle": {
+      "points": 45,
+      "terms": ["ai automation", "automation engineer", "prompt engineer", "ai engineer",
+                "agentic", "ai agent", "n8n", "make.com", "zapier", "workflow automation",
+                "llm engineer", "generative ai", "genai", "ai developer", "ai integration",
+                "ai solution", "forward deployed", "automation specialist", "ai consultant",
+                "ai product engineer", "ai workflow"]
+    },
+    "adjacentTitle": {
+      "points": 22,
+      "terms": ["full stack", "fullstack", "full-stack", "frontend", "front end", "front-end",
+                "react", "node.js", "nodejs", "javascript", "typescript", "web developer",
+                "software engineer", "software developer", "mern", "technical seo",
+                "product engineer", "integration engineer"]
+    },
+    "hotInDescription": { "points": 12 },
+    "stack": {
+      "pointsEach": 4,
+      "max": 22,
+      "terms": ["react", "vite", "node", "javascript", "typescript", "openai", "gemini", "claude",
+                "langchain", "rest api", "webhook", "oauth", "google sheets", "json schema",
+                "vercel", "seo", "prompt", "automation", "n8n", "rag", "vector", "zapier",
+                "make.com", "api integration", "llm", "gpt", "canvas", "webrtc"]
+    },
+    "geo": {
+      "home": { "points": 30, "terms": ["surat", "gujarat", "ahmedabad", "vadodara", "gandhinagar"] },
+      "country": { "points": 26, "terms": ["india"] },
+      "worldwide": { "points": 18, "terms": ["worldwide", "anywhere", "global"] },
+      "region": { "points": 16, "terms": ["asia", "apac"] },
+      "vagueRemote": { "points": 6, "terms": ["remote"] },
+      "lockedAbroad": {
+        "points": -35,
+        "terms": ["united states", "usa", "u.s.", "us only", "canada", "brazil", "mexico",
+                  "germany", "berlin", "munich", "hamburg", "france", "paris", "spain", "poland",
+                  "netherlands", "amsterdam", "uk only", "united kingdom", "london", "australia",
+                  "singapore", "japan", "argentina", "colombia", "portugal", "latam",
+                  "philippines", "nigeria", "kenya", "south africa", "new york", "san francisco",
+                  "austin", "toronto", "dubai", "israel", "sweden", "denmark", "ireland", "italy",
+                  "switzerland", "austria", "belgium", "czech", "romania", "ukraine", "turkey",
+                  "egypt", "emea only", "europe only", "north america", "americas"]
+      }
+    },
+    "seniority": {
+      "points": -28,
+      "terms": ["vp of", "vice president", "director of", "head of", "principal ", "staff ",
+                "chief ", "cto", "engineering manager", "architect", "team lead"]
+    },
+    "offStack": {
+      "points": -35,
+      "terms": ["elixir", "rails", "ruby on rails", ".net", "c# ", "java developer", "spring boot",
+                "php", "laravel", "wordpress developer", "salesforce developer", "sap ", "abap",
+                "unity", "unreal", "android developer", "ios developer", "swift ", "kotlin",
+                "embedded", "rust ", "golang", "go developer", "devops engineer", "sre ",
+                "kubernetes", "data engineer", "mlops", "security engineer", "qa automation",
+                "rpa ", "uipath", "blue prism", "automation anywhere", "account executive", "recruiter",
+                "designer", "marketing manager", "customer success", "support engineer"]
+    },
+    "minScore": 35
+  },
+
+  "evidence": [
+    {
+      "id": "jewellery-bi",
+      "name": "Jewellery Business Intelligence Platform (13 workflows, live)",
+      "triggers": ["business intelligence", "reporting", "dashboard", "retail", "sheets", "kpi",
+                   "analytics", "n8n", "workflow", "data"],
+      "line": "Built a 13-workflow BI system for a jewellery retailer — workflows generated from source, version-controlled and covered by a 190+ check suite that live-executes every code node before deploy."
+    },
+    {
+      "id": "blog-agent",
+      "name": "SEO + AEO + GEO Blog Content Agent (10-stage pipeline)",
+      "triggers": ["content", "seo", "orchestration", "multi-agent", "sub-workflow", "quality",
+                   "schema", "json", "agentic", "pipeline"],
+      "line": "Designed a 10-stage orchestrator chaining specialist sub-workflows with a strict JSON schema at every stage, an 85-point quality gate and a bounded revision loop — plus a hard guard that forbids the model stating any unverified figure as fact."
+    },
+    {
+      "id": "news-linkedin",
+      "name": "AI News → LinkedIn Publishing Pipeline (daily, live)",
+      "triggers": ["social", "linkedin", "content", "publishing", "approval", "human-in-the-loop",
+                   "telegram", "oauth", "rss", "scheduled"],
+      "line": "Runs a daily 20-node pipeline: five RSS feeds aggregated, deduped and ranked into Google Sheets, an LLM drafts the post, and it only publishes to LinkedIn on a human approval tap in Telegram."
+    },
+    {
+      "id": "job-lead-engines",
+      "name": "Job Application & Inbox-to-Client Engines",
+      "triggers": ["support", "triage", "inbox", "email", "gmail", "classification", "lead",
+                   "crm", "customer", "ticket"],
+      "line": "Built an inbox triage engine that polls Gmail every 15 minutes, classifies each message into lead / recruiter / job alert / spam and auto-replies with a per-sender cooldown."
+    },
+    {
+      "id": "products",
+      "name": "Six live web products",
+      "triggers": ["react", "frontend", "front end", "vite", "javascript", "typescript",
+                   "web", "product", "full stack", "ui", "canvas", "webrtc"],
+      "line": "Ships and operates six live React/Vite products — including a browser-only WebRTC video call with real-time translated subtitles, and an ATS resume builder with no login step."
+    },
+    {
+      "id": "seo",
+      "name": "SEO & AI search visibility across six properties",
+      "triggers": ["seo", "search console", "schema", "structured data", "core web vitals",
+                   "organic", "growth", "geo", "aeo"],
+      "line": "Manages six properties in Search Console and diagnosed a ranking collapse to its real cause — a frozen sitemap lastmod blocking recrawl for 20 days — rather than the obvious but wrong correlation with recent commits."
+    },
+    {
+      "id": "retail-ops",
+      "name": "Four years managing retail store operations",
+      "triggers": ["retail", "pharma", "pharmaceutical", "inventory", "operations", "stakeholder",
+                   "client success", "non-technical", "business"],
+      "line": "Ran daily operations for a pharmaceutical retail store for four years — inventory, P&L and reporting to ownership — so translating a business question into an automated report is familiar ground, not a stretch."
+    }
+  ],
+
+  "gaps": {
+    "_comment": "Named honestly so a pitch brief can address them instead of pretending they are absent.",
+    "python": "Résumé is JavaScript/Node-first; Python appears only through LLM APIs.",
+    "cloud": "No AWS/GCP/Azure certification or large-scale infra ownership.",
+    "years": "Engineering experience dates from 2025; four prior years are retail operations.",
+    "team": "Solo/freelance delivery — no line management or formal team lead experience."
+  }
+}
