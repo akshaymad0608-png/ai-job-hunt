@@ -58,7 +58,14 @@ sources that returns the roles the résumé actually matches.
    and are re-scored against it. Those rows are marked `*` in the HTML: a
    starred score saw the full JD and an unstarred one saw only the card, so the
    two are not comparable — compare starred with starred.
-5. **Report.** `reports/shortlist-<date>.{json,html}`, ranked. With `--briefs`,
+5. **Gate on eligibility (`--briefs` only).** Fit and eligibility are different
+   questions and the scorer only answered the first: a role demanding 7–11
+   years scored 105 and led the list, and so did one whose shift is 5pm–3am.
+   Neither fact is on the search card. Enriched rows are now penalised for
+   years beyond reach, a night shift, and onsite-only outside Gujarat — as
+   penalties, not filters, because a bar missed by a year is still worth
+   seeing. Weights live under `scoring.eligibility` in `profile.json`.
+6. **Report.** `reports/shortlist-<date>.{json,html}`, ranked. With `--briefs`,
    also `reports/briefs-<date>.json`: for each of the top 15, which of the
    résumé's projects to lead with and which gap the posting will judge you on.
 
@@ -112,6 +119,14 @@ healthy Jobicy count — supplied entirely by the one call that happened to carr
 no filter. The geo filter had never worked. It now filters by industry and lets
 the scorer handle geography, and a failing source prints `FAILED` in the run
 log instead of being absorbed.
+
+**A years figure is read at its lowest, and the spread is reported.** Postings
+restate their bar loosely further down, so penalising on the highest figure
+would hide roles that are actually open. EXL's JD carries both "1–3+ years" and
+"5 to 12 years"; it scores at 1 deliberately. But printing `asks 1y` beside it
+and saying nothing else would be a lie of omission, so when the low and high
+differ by more than a year the note says `JD also says 12y` and the range is
+itself the warning. That note carries no penalty.
 
 **LinkedIn's card hrefs are not stable.** Every response carries fresh
 `refId` and `trackingId` params, so keying dedupe on the href would treat the

@@ -81,7 +81,16 @@
                 "rpa ", "uipath", "blue prism", "automation anywhere", "account executive", "recruiter",
                 "designer", "marketing manager", "customer success", "support engineer"]
     },
-    "minScore": 35
+    "minScore": 35,
+
+    "_eligibility": "Applied only to roles whose real JD has been fetched (--briefs). A search card carries no requirements, so these can only ever fire after enrichment.",
+    "eligibility": {
+      "yearsHeld": 2,
+      "yearsGraceBeyondHeld": 2,
+      "yearsOverPoints": -40,
+      "nightShiftPoints": -25,
+      "onsiteOutsideHomePoints": -12
+    }
   },
 
   "evidence": [

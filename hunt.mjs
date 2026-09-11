@@ -343,6 +343,73 @@ async function enrich(list) {
   return filled;
 }
 
+/* ----------------------------------------------------------- eligibility -- */
+
+// Fit and eligibility are different questions, and the scorer only ever
+// answered the first. A role demanding 7-11 years scored 105 and sat at the
+// top of the list; so did one whose shift is 5pm-3am. Neither fact exists on
+// the search card — both are in the JD, which only enrichment fetches. So
+// these penalties can only fire on enriched rows, and they are penalties
+// rather than filters: a bar you miss by a year is worth seeing, and a night
+// shift is a preference, not a disqualification.
+
+const YEARS_RE = /(\d{1,2})\s*(?:\+|to|-|–|—)?\s*(\d{1,2})?\s*\+?\s*(?:years?|yrs?)\b/gi;
+
+function eligibility(job) {
+  const d = job.desc || '';
+  if (!d) return null;
+  const E = S.eligibility;
+  const out = { years: null, yearsMax: null, nightShift: false, onsiteOnly: false, penalised: false, notes: [] };
+
+  // Penalise on the LOWEST "N years" figure in the JD, because postings
+  // routinely restate the bar more loosely further down and erring toward
+  // showing a role is cheaper than hiding one he could have had.
+  //
+  // But report the highest too. EXL's JD carries both "1-3+ years" and
+  // "5 to 12 years"; scoring it at 1 is deliberate, and silently printing
+  // "asks 1y" next to it would be a lie of omission. When the two differ the
+  // note shows the spread so the range itself is the warning.
+  let lowest = null;
+  let highest = null;
+  for (const m of d.matchAll(YEARS_RE)) {
+    const n = Number(m[1]);
+    if (n < 1 || n > 25) continue;
+    if (lowest === null || n < lowest) lowest = n;
+    if (highest === null || n > highest) highest = n;
+  }
+  out.years = lowest;
+  out.yearsMax = highest;
+  if (highest !== null && highest > lowest + 1) {
+    out.notes.push(`JD also says ${highest}y`);
+  }
+
+  if (/\b\d{1,2}\s*(?:am|pm)\s*(?:to|-|–|—)\s*\d{1,2}\s*(?:am|pm)\b/i.test(d) ||
+      /\bnight shift\b|\bUS shift\b|\brotational shift\b/i.test(d)) {
+    out.nightShift = true;
+  }
+  if (/onsite only|work from office|\bWFO\b/i.test(d)) out.onsiteOnly = true;
+
+  const ceiling = E.yearsHeld + E.yearsGraceBeyondHeld;
+  const penalise = (pts, note) => {
+    job.score += pts;
+    out.notes.push(note);
+    out.penalised = true;
+  };
+
+  if (out.years !== null && out.years > ceiling) penalise(E.yearsOverPoints, `asks ${out.years}y`);
+  if (out.nightShift) penalise(E.nightShiftPoints, 'night shift');
+  if (out.onsiteOnly) {
+    const loc = (job.loc || '').toLowerCase();
+    if (!hits(loc, S.geo.home.terms).length) {
+      penalise(E.onsiteOutsideHomePoints, 'onsite, not Gujarat');
+    }
+  }
+
+  job.eligibility = out;
+  if (out.notes.length) job.why += `; ${out.notes.join(', ')}`;
+  return out;
+}
+
 /* ---------------------------------------------------------------- briefs -- */
 
 // Picks which of the résumé's projects to lead with for a given posting, and
@@ -382,7 +449,8 @@ function writeHtml(list, stamp, path) {
     <tr>
       <td class="s">${j.score}${j.enriched ? '<span class="e" title="scored on the full job description">*</span>' : ''}</td>
       <td><a href="${esc(j.url)}">${esc(j.title)}</a><br><span class="c">${esc(j.company)}</span></td>
-      <td>${esc(j.loc)}</td>
+      <td>${esc(j.loc)}${j.eligibility && j.eligibility.notes.length
+        ? `<br><span class="g">${esc(j.eligibility.notes.join(' · '))}</span>` : ''}</td>
       <td class="d">${esc(j.date)}</td>
       <td class="w">${esc(j.why)}</td>
       <td class="d">${esc(j.src)}</td>
@@ -405,6 +473,7 @@ function writeHtml(list, stamp, path) {
  td.w{font-size:.82rem;color:#6b7280;max-width:22rem}
  span.c{color:#6b7280;font-size:.85rem}
  span.e{color:#b45309}
+ span.g{color:#b45309;font-size:.75rem}
  a{color:inherit}
  p.note{color:#6b7280;font-size:.82rem;margin:0 0 1.5rem;max-width:60rem}
 </style>
@@ -463,7 +532,14 @@ if (WANT_BRIEFS) {
   console.log(`\nFetching job descriptions for the top ${pool.length}…`);
   const filled = await enrich(pool);
   console.log(`  ${filled} descriptions retrieved`);
-  shortlist = shortlist.sort((a, b) => b.score - a.score);
+  let gated = 0;
+  for (const j of pool) {
+    const e = eligibility(j);
+    if (e && e.penalised) gated++;
+  }
+  console.log(`  ${gated} carry an eligibility penalty (years, shift or onsite)`);
+  // Re-filter: a role can now drop below the cutoff on eligibility alone.
+  shortlist = shortlist.filter((j) => j.score >= MIN_SCORE).sort((a, b) => b.score - a.score);
 }
 
 const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ');
